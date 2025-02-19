@@ -28,6 +28,7 @@ Transform your study notes into interactive quizzes and beautifully formatted eq
 
 ## Tech Stack 💻
 
+- **Frontend**: Flutter
 - **Backend**: Express.js with MongoDB
 - **Queue System**: RabbitMQ for file processing and message handling
 - **LLM Integration**: Custom LLM service for quiz generation
