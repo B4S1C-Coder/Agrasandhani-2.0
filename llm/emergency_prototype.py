@@ -9,6 +9,20 @@ from PyPDF2 import PdfReader
 import pika.adapters.blocking_connection
 import pika.spec
 
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "RabbitMQ worker is running!"
+
+def run_web_server():
+    port = int(os.getenv("PORT", 8000))
+    app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False)
+
+
 load_dotenv()
 
 MODEL = 'mistral-small-latest'
@@ -84,6 +98,7 @@ def callback(ch: pika.adapters.blocking_connection.BlockingChannel, method: pika
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 def main():
+    threading.Thread(target=run_web_server, daemon=True).start()
     params = pika.URLParameters(os.getenv("RABBIMQ_URL"))
     connection = pika.BlockingConnection(params)
     channel = connection.channel()
